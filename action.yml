@@ -1,4 +1,6 @@
-name: AWS S3 Cache
+name: actions-s3-cache
+author: shonansurvivors
+description: This action installs dependencies or builds, and caches them in S3.
 inputs:
   s3-bucket:
     required: true
