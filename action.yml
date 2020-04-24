@@ -10,10 +10,10 @@ inputs:
     required: true
   zip-option:
     required: false
-    default: -n
+    default: -ryq
   unzip-option:
     required: false
-    default: -ryq
+    default: -n
   working-directory:
     required: false
     default: ./
