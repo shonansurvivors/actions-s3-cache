@@ -23,7 +23,7 @@ jobs:
         uses: ./
         with:
           s3-bucket: ${{ secrets.S3Bucket }}
-          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
+          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}
           paths: vendor
           command: composer install -n --prefer-dist
           zip-option: -ryq
@@ -31,7 +31,7 @@ jobs:
           working-directory: test
       - run: test -d test/vendor
       - name: assert cache exit
-        run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}.zip
+        run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}.zip
 
   test_cache_hit:
     needs: [test_cache_miss_and_upload]
@@ -47,7 +47,7 @@ jobs:
         uses: ./
         with:
           s3-bucket: ${{ secrets.S3Bucket }}
-          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-S{GITHUB_RUN_ID}
+          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}
           paths: vendor
           command: composer install -n --prefer-dist
           zip-option: -ryq
@@ -55,4 +55,4 @@ jobs:
           working-directory: test
       - run: test -d test/vendor
       - name: clean up
-        run: aws s3 rm s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}.zip
+        run: aws s3 rm s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}.zip
