@@ -34,6 +34,7 @@ jobs:
         run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
 
   test_cache_hit:
+    needs: [test_cache_miss_and_upload]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
