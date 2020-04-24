@@ -5,7 +5,6 @@
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
     "aws-sdk": "^2.654.0",
-    "graceful-fs": "^4.2.3",
-    "mime-types": "^2.1.26"
+    "graceful-fs": "^4.2.3"
   }
 }
