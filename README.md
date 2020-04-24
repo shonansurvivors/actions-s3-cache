@@ -43,3 +43,6 @@ steps:
     ]
 }
 ```
+## License
+
+[MIT License](https://github.com/shonansurvivors/actions-s3-cache/blob/master/LICENCE) - Copyrights (c) 2020 shonansurvivors
