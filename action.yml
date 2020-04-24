@@ -1,0 +1,22 @@
+name: AWS S3 Cache
+inputs:
+  s3-bucket:
+    required: true
+  cache-key:
+    required: true
+  paths:
+    required: true
+  command:
+    required: true
+  zip-option:
+    required: false
+    default: -n
+  unzip-option:
+    required: false
+    default: -ryq
+  working-directory:
+    required: false
+    default: ./
+runs:
+  using: node12
+  main: index.js

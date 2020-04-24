@@ -1,0 +1,55 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ap-northeast-1
+
+jobs:
+  test_cache_miss_and_upload:
+    runs-on: ubuntu-latest
+    steps:
+      - actions/checkout@v2
+      - name: set up php 7.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3.x
+      - name: assert cache miss
+        uses: ./
+        with:
+          s3-bucket: ${{ secrets.S3Bucket }}
+          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
+          paths: vendor
+          command: composer install -n --prefer-dist
+          zip-args: -ryq
+          unzip-args: -n
+          working-directory: test
+      - run: test -d vendor
+      - name: assert cache exit
+        run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
+
+  test_cache_hit:
+    runs-on: ubuntu-latest
+    steps:
+      - actions/checkout@v2
+      - name: set up php 7.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.3.x
+      - name: assert cache hit
+        uses: ./
+        with:
+          s3-bucket: ${{ secrets.S3Bucket }}
+          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-S{GITHUB_RUN_ID}
+          paths: vendor
+          command: composer install -n --prefer-dist
+          zip-args: -ryq
+          unzip-args: -n
+          working-directory: test
+      - run: test -d vendor
+      - name: clean up
+        run: aws s3 rm s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
