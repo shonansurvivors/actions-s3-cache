@@ -29,7 +29,7 @@ jobs:
           zip-args: -ryq
           unzip-args: -n
           working-directory: test
-      - run: test -d vendor
+      - run: test -d test/vendor
       - name: assert cache exit
         run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
 
@@ -53,6 +53,6 @@ jobs:
           zip-args: -ryq
           unzip-args: -n
           working-directory: test
-      - run: test -d vendor
+      - run: test -d test/vendor
       - name: clean up
         run: aws s3 rm s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
