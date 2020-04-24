@@ -26,8 +26,8 @@ jobs:
           cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${GITHUB_RUN_ID}
           paths: vendor
           command: composer install -n --prefer-dist
-          zip-args: -ryq
-          unzip-args: -n
+          zip-option: -ryq
+          unzip-opton: -n
           working-directory: test
       - run: test -d test/vendor
       - name: assert cache exit
@@ -50,8 +50,8 @@ jobs:
           cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-S{GITHUB_RUN_ID}
           paths: vendor
           command: composer install -n --prefer-dist
-          zip-args: -ryq
-          unzip-args: -n
+          zip-option: -ryq
+          unzip-opton: -n
           working-directory: test
       - run: test -d test/vendor
       - name: clean up
