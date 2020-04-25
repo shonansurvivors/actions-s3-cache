@@ -29,7 +29,7 @@ jobs:
           zip-option: -ryq
           unzip-opton: -n
           working-directory: test
-      - run: test -d test/vendor
+      - run: test -d test/node_modules
       - name: assert cache exit
         run: aws s3 ls s3://${{ secrets.S3Bucket }}/npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}.zip
 
@@ -53,6 +53,6 @@ jobs:
           zip-option: -ryq
           unzip-opton: -n
           working-directory: test
-      - run: test -d test/vendor
+      - run: test -d test/node_modules
       - name: clean up
         run: aws s3 rm s3://${{ secrets.S3Bucket }}/npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}.zip
