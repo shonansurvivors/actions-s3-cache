@@ -15,10 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - name: set up php 7.3
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.3.x
       - name: assert cache miss
         uses: ./
         with:
