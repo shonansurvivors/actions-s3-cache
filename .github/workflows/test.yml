@@ -15,23 +15,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - name: set up php 7.3
-        uses: shivammathur/setup-php@v2
+      - name: set up node.js 10
+        uses: actions/setup-node@v1.4.0
         with:
-          php-version: 7.3.x
+          node-version: 10.x
       - name: assert cache miss
         uses: ./
         with:
           s3-bucket: ${{ secrets.S3Bucket }}
-          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}
-          paths: vendor
-          command: composer install -n --prefer-dist
+          cache-key: npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}
+          paths: node_modules
+          command: npm ci
           zip-option: -ryq
           unzip-opton: -n
           working-directory: test
       - run: test -d test/vendor
       - name: assert cache exit
-        run: aws s3 ls s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}.zip
+        run: aws s3 ls s3://${{ secrets.S3Bucket }}/npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}.zip
 
   test_cache_hit:
     needs: [test_cache_miss_and_upload]
@@ -39,20 +39,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - name: set up php 7.3
-        uses: shivammathur/setup-php@v2
+      - name: set up node.js 10
+        uses: actions/setup-node@v1.4.0
         with:
-          php-version: 7.3.x
+          node-version: 10.x
       - name: assert cache hit
         uses: ./
         with:
           s3-bucket: ${{ secrets.S3Bucket }}
-          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}
-          paths: vendor
-          command: composer install -n --prefer-dist
+          cache-key: npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}
+          paths: node_modules
+          command: npm ci
           zip-option: -ryq
           unzip-opton: -n
           working-directory: test
       - run: test -d test/vendor
       - name: clean up
-        run: aws s3 rm s3://${{ secrets.S3Bucket }}/composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}.zip
+        run: aws s3 rm s3://${{ secrets.S3Bucket }}/npm-v1-${{ hashFiles('test/package-lock.json') }}-${{ env.GITHUB_RUN_ID }}.zip
