@@ -29,7 +29,7 @@ async function run() {
           await exec.exec(command); // install or build command e.g. npm ci, npm run dev
           await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
 
-          s3.upload({
+          await s3.putObject({
               Body: fs.readFileSync(fileName),
               Bucket: s3Bucket,
               Key: fileName,
