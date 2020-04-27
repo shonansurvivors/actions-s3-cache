@@ -44,7 +44,7 @@ async function run() {
 
         } else {
           console.log(`Found a cache for key: ${fileName}`);
-          fs.writeFile(fileName, data.Body);
+          await fs.writeFile(fileName, data.Body);
 
           await exec.exec(`unzip ${unzipOption} ${fileName}`);
           await exec.exec(`rm -f ${fileName}`);
