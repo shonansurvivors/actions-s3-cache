@@ -6,7 +6,8 @@ This action installs dependencies or builds, and caches them in S3.
 
 ```yaml
 steps:
-  - uses: shonansurvivors/actions-s3-cache@v1
+  - uses: actions/checkout@v2
+  - uses: shonansurvivors/actions-s3-cache@v1.0.1
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
