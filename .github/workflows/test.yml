@@ -10,6 +10,22 @@ env:
   AWS_DEFAULT_REGION: ap-northeast-1
 
 jobs:
+  test_build_failed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm ci
+      - name: assert build failed
+        uses: ./
+        with:
+          s3-bucket: ${{ secrets.S3Bucket }}
+          cache-key: composer-v1-${{ hashFiles('test/composer.lock') }}-${{ env.GITHUB_RUN_ID }}
+          paths: vendor
+          command: exit 1
+          zip-option: -ryq
+          unzip-opton: -n
+          working-directory: test
+
   test_cache_miss_and_upload:
     runs-on: ubuntu-latest
     steps:
