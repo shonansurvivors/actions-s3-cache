@@ -28,7 +28,7 @@ async function run() {
           let commandError = '';
 
           // install or build command e.g. npm ci, npm run dev
-          await exec.exec(command,[],{
+          await exec.exec(command, [], {
             listeners: {
               stderr: (data) => {
                 commandError += data.toString().trim();
