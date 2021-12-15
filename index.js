@@ -19,17 +19,29 @@ async function run() {
 
     const s3 = new AWS.S3();
 
-    s3.getObject({
+    await s3.getObject({
         Bucket: s3Bucket,
         Key:fileName
       }, async (err, data) => {
         if (err) {
           console.log(`No cache is found for key: ${fileName}`);
+          let commandError = '';
 
-          await exec.exec(command); // install or build command e.g. npm ci, npm run dev
+          // install or build command e.g. npm ci, npm run dev
+          await exec.exec(command, [], {
+            listeners: {
+              stderr: (data) => {
+                commandError += data.toString().trim();
+              }
+            }
+          });
+          if (commandError) {
+            throw new Error(commandError);
+          }
+
           await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
 
-          s3.upload({
+          await s3.upload({
               Body: fs.readFileSync(fileName),
               Bucket: s3Bucket,
               Key: fileName,
@@ -40,7 +52,7 @@ async function run() {
                 console.log(`Stored cache to ${fileName}`);
               }
             }
-          );
+          ).promise();
 
         } else {
           console.log(`Found a cache for key: ${fileName}`);
@@ -49,11 +61,11 @@ async function run() {
           await exec.exec(`unzip ${unzipOption} ${fileName}`);
           await exec.exec(`rm -f ${fileName}`);
         }
-    });
+    }).promise();
 
   }
   catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(error?.message)
   }
 }
 
