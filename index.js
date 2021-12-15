@@ -19,7 +19,7 @@ async function run() {
 
     const s3 = new AWS.S3();
 
-    s3.getObject({
+    await s3.getObject({
         Bucket: s3Bucket,
         Key:fileName
       }, async (err, data) => {
@@ -41,7 +41,7 @@ async function run() {
 
           await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
 
-          s3.upload({
+          await s3.upload({
               Body: fs.readFileSync(fileName),
               Bucket: s3Bucket,
               Key: fileName,
@@ -52,7 +52,7 @@ async function run() {
                 console.log(`Stored cache to ${fileName}`);
               }
             }
-          );
+          ).promise();
 
         } else {
           console.log(`Found a cache for key: ${fileName}`);
@@ -61,7 +61,7 @@ async function run() {
           await exec.exec(`unzip ${unzipOption} ${fileName}`);
           await exec.exec(`rm -f ${fileName}`);
         }
-    });
+    }).promise();
 
   }
   catch (error) {
