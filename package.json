@@ -2,7 +2,7 @@
   "name": "actions-s3-cache",
   "main": "index.js",
   "dependencies": {
-    "@actions/core": "^1.2.3",
+    "@actions/core": "^1.9.1",
     "@actions/exec": "^1.0.3",
     "@zeit/ncc": "^0.22.1",
     "aws-sdk": "^2.654.0",
