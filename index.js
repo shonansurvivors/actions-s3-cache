@@ -27,7 +27,7 @@ async function run() {
           console.log(`No cache is found for key: ${fileName}`);
 
           await exec.exec(command); // install or build command e.g. npm ci, npm run dev
-          await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
+          await exec.exec('bash', ['-c', `zip ${zipOption} ${fileName} ${paths}`]);
 
           s3.upload({
               Body: fs.readFileSync(fileName),
