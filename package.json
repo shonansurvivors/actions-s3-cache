@@ -1,6 +1,9 @@
 {
   "name": "actions-s3-cache",
   "main": "index.js",
+  "scripts": {
+    "build": "ncc build src/index.js -o dist"
+  },
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
