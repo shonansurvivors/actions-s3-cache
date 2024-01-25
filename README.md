@@ -20,6 +20,7 @@ steps:
       zip-option: -ryq # optional (default: -ryq)
       unzip-option: -n # optional (default: -n)
       working-directory: laravel # optional (default: ./)
+      cache-hit-skip: false # optional (defaultL: false) set to true will skip run command when cache hit
 ```
 
 ## IAM Policy Example
